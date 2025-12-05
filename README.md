@@ -37,7 +37,6 @@ The following script installs php8.1, composer, mariadb-server + user and create
 * Set xdebug stub in VSCode Preferences: User Settings (JSON).
 * Set php include folder: C:\php-{8.3}\
 
-
 ## Scripts
 
 ### MariaDB
@@ -78,3 +77,14 @@ Install apache2 + vhost and system web directories.
 * Run all tests: ``./vendor/bin/phpunit``
 * Run specific test suite: ``./vendor/bin/phpunit --testsuite="<test_suite>"``
 * Run specific test: ``./vendor/bin/phpunit --filter "<method_name>" "<unit_test_file>"``
+
+## Docker
+* ``docker run --name <new-container-name> -d httpd:2.4``
+* ``docker compose up -d --build``
+* ``docker exec <container-name> <command>``
+* * ``docker exec -it <container-name> bash|sh``
+* ``docker ps -a``
+* ``docker prune -f --filter status=exited``
+* ``docker start <container-name>``
+* ``docker restart <container-name>``
+* ``docker stop <container-name>``
