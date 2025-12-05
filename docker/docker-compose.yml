@@ -1,0 +1,38 @@
+services:
+  apache2:
+    build: ./docker/apache2
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./src:/var/www/src
+      - ./docker/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
+      - ./docker/apache2/extra/httpd-vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf
+    depends_on:
+      - domain-name
+    networks:
+      - domain-net
+
+  main-site:
+    build: ./docker/php
+    volumes:
+      - ./src:/var/www/src
+    networks:
+      - domain-net
+
+  mariadb:
+    image: mariadb:11
+    #restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: project-name
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - domain-net
+
+volumes:
+  db_data:
+
+networks:
+  domain-net:
