@@ -1,19 +1,12 @@
 #!/bin/bash
 
 if [ -z "$1" ]; then
-	echo "Usage: $0 <domain> <system_dir>"
+	echo "Usage: $0 <domain>"
 	exit 1
 fi
 DOMAIN=$1
 
-if [ -z "$2" ]; then
-	echo "Usage: $0 <domain> <system_dir>"
-	exit 1
-fi
-SYSTEM_DIR=$2
-
 echo -e "\n\n***Installing Apache 2***\n\n"
-sudo apt-get update
 sudo apt-get install -y apache2
 sudo apt install -y net-tools
 
@@ -38,18 +31,10 @@ if [ $? -ne 0 ]; then
 fi
 
 VHOST_FILE="000-$DOMAIN.conf"
-IP=$(ifconfig | grep 'inet ' | awk '{print $2}' | head -n1):80
-
-echo -e "\nCreating vhost file $VHOST_FILE for $DOMAIN with ip $IP"
+echo -e "\nCreating vhost file $VHOST_FILE"
 sudo touch "/etc/apache2/sites-available/$VHOST_FILE"
 if [ $? -ne 0 ]; then
 	echo "Error creating empty vhost file: $VHOST_FILE"
-	exit 1
-fi
-
-sudo DOMAIN=$DOMAIN SYSTEM_DIR=$SYSTEM_DIR IP=$IP bash -c "cat ../conf/vhost.conf | envsubst > /etc/apache2/sites-available/$VHOST_FILE"
-if [ $? -ne 0 ]; then
-	echo "Error creating vhost file: $VHOST_FILE"
 	exit 1
 fi
 
